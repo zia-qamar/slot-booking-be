@@ -10,8 +10,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  # More simple approach to define routes
-  # get 'slots/new', to: 'slots#new'
-  # post 'slots/book', to: 'slots#book'
 end

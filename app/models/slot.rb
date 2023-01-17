@@ -4,6 +4,8 @@ class Slot < ApplicationRecord
   validates :start, :end, presence: true
   validate :end_time_after_start_time
 
+  scope :booked_slots, ->(start_time, end_time) { where("slots.start >= ? AND slots.end <= ?", start_time, end_time) }
+
   private
 
   def end_time_after_start_time

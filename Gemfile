@@ -32,6 +32,7 @@ group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
 end
 
+gem "rack-cors"
 group :development do
   gem "listen", "~> 3.2"
   gem "rubocop"

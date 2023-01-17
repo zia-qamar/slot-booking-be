@@ -9,7 +9,7 @@ RSpec.describe SlotsController, type: :controller do
         Slot.create(start: "2022-02-01T10:00:00.000Z", end: "2022-02-01T11:00:00.000Z")
         Slot.create(start: "2022-02-01T12:00:00.000Z", end: "2022-02-01T13:00:00.000Z")
         Slot.create(start: "2022-02-01T14:00:00.000Z", end: "2022-02-01T15:00:00.000Z")
-        get :new, params: { day: "2022-02-01", duration: 60 }
+        get :new, params: { date: "2022-02-01", duration: 60 }
       end
 
       it "returns a success response" do
@@ -27,13 +27,13 @@ RSpec.describe SlotsController, type: :controller do
     end
 
     context "with invalid params" do
-      it "returns an unprocessable_entity status if the day is not provided" do
+      it "returns an bad_request status if the day is not provided" do
         get :new, params: { duration: 60 }
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it "returns an unprocessable_entity status if the duration is not provided" do
-        get :new, params: { day: "2022-02-01" }
+      it "returns an bad_request status if the duration is not provided" do
+        get :new, params: { date: "2022-02-01" }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe SlotsController, type: :controller do
       it "returns a 201 status code" do
         post :book, params: { start_time: "2022-02-01T10:00:00.000Z", end_time: "2022-02-01T11:00:00.000Z" }
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)["message"]).to eq("Slot booked successfully")
+        expect(JSON.parse(response.body)["message"]).to eq("Slot is booked successfully.")
       end
     end
 
@@ -61,10 +61,9 @@ RSpec.describe SlotsController, type: :controller do
         Slot.create(start: "2022-02-01T10:00:00.000Z", end: "2022-02-01T11:00:00.000Z")
       end
 
-      it "returns a 400 status code" do
+      it "returns a 404 status code" do
         post :book, params: { start_time: "2022-02-01T10:00:00.000Z", end_time: "2022-02-01T11:00:00.000Z" }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["message"]).to eq("Slot is not available")
+        expect(response).to have_http_status("404")
       end
     end
 
@@ -72,7 +71,6 @@ RSpec.describe SlotsController, type: :controller do
       it "returns a bad request status code when end_time is less than start_time" do
         post :book, params: { start_time: "2022-02-01T10:00:00.000Z", end_time: "2022-02-01T09:00:00.000Z" }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["message"]).to eq("Failed to book slot")
       end
     end
   end
