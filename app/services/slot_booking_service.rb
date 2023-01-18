@@ -25,6 +25,7 @@ class SlotBookingService
 
     raise "api_error" unless slot.save
 
+    ActionCable.server.broadcast("slots", slot: slot)
     { message: "Slot is booked successfully.", slot: slot }
   end
 

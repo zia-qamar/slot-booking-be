@@ -49,3 +49,5 @@ The API has the following endpoints:
   "end_time": "2022-01-01 09:30:00"
   }
   `
+## Todo
+* Implement rake task to delete unused booked slots after passing x number of days.
